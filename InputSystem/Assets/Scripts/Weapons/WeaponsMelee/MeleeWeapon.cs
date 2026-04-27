@@ -27,6 +27,7 @@ public class MeleeWeapon : WeaponBase
 
     public override void StopAttack()
     {
+        StopAllCoroutines();
         isAttacking = false;
     }
 
@@ -74,4 +75,6 @@ public class MeleeWeapon : WeaponBase
         Vector2 center = (Vector2)transform.position + (Vector2)transform.right * data.attackRange * 0.5f;
         Gizmos.DrawWireSphere(center, data.attackRange);
     }
+
+
 }

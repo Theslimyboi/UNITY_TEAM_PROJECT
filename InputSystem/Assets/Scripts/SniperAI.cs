@@ -23,6 +23,7 @@ public class SniperAI : MonoBehaviour
 
     void Update()
     {
+        if (player == null || !player.gameObject.activeInHierarchy) return;
         float distance = Vector2.Distance(gunPoint.position, player.position);
 
         
