@@ -1,57 +1,90 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Shotgun with recoil-based movement
-// Attach to Shotgun GameObject under Player
+// Shotgun with spread, recoil, and full VFX support.
+// Attach to Shotgun GameObject under Player.
+//
+// Inspector checklist:
+//   data            -> ShotgunData ScriptableObject
+//   firePoint       -> FirePoint child transform
+//   vfx             -> VFXController on this same GameObject
+//   ammo            -> AmmoSystem on this same GameObject (or null = infinite)
+//   bulletPrefab    -> ShotgunPellet prefab  (NOT the pistol Bullet prefab)
+//   muzzleFlashPrefab (on VFXController) -> assign a flash sprite/particle prefab
+
 public class ShotgunWeapon : WeaponBase
 {
     [Header("Shotgun Settings")]
-    public int pelletCount = 6;          // Number of bullets per shot
-    public float spreadAngle = 30f;      // Total spread in degrees
+    public int pelletCount = 6;      // pellets fired per shot
+    public float spreadAngle = 30f;    // total spread cone in degrees
+
+    // bulletPrefab must use ShotgunPellet, not Bullet
     public GameObject bulletPrefab;
 
     [Header("Recoil Settings")]
-    public float recoilForce = 15f;      // How strong the knockback is
-    public bool recoilCancelVelocity = false; // Cancel current velocity before recoil
+    public float recoilForce = 15f;
+    public bool recoilCancelVelocity = false;
 
     private Rigidbody2D playerRb;
 
+    // ── Unity lifecycle ────────────────────────────────────────────────────────
+
     void Awake()
     {
-        // Find player Rigidbody2D by going up the hierarchy
         playerRb = GetComponentInParent<Rigidbody2D>();
     }
+
+    // ── WeaponBase implementation ──────────────────────────────────────────────
 
     public override void Attack()
     {
         if (!CanAttack()) return;
         Shoot();
         ApplyRecoil();
-        OnAttackPerformed();
+        OnAttackPerformed();   // handles fire-rate timer + ammo consumption
     }
 
     public override void StopAttack() { }
 
+    // ── Private helpers ────────────────────────────────────────────────────────
+
     private void Shoot()
     {
-        if (bulletPrefab == null || firePoint == null) return;
-
-        Vector2 mouseScreen = Mouse.current.position.ReadValue();
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreen);
-        Vector2 baseDirection = (mousePos - (Vector2)firePoint.position).normalized;
-
-        // Spawn multiple pellets with spread
-        for (int i = 0; i < pelletCount; i++)
+        if (bulletPrefab == null)
         {
-            // Calculate spread offset for each pellet
-            float spreadOffset = Random.Range(-spreadAngle * 0.5f, spreadAngle * 0.5f);
-            Vector2 spreadDir = RotateVector(baseDirection, spreadOffset);
-
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-            Bullet b = bullet.GetComponent<Bullet>();
-            if (b != null) b.Initialize(spreadDir, CalculateDamage(), data.damageType, vfx);
+            Debug.LogWarning("ShotgunWeapon: bulletPrefab not assigned!", this);
+            return;
+        }
+        if (firePoint == null)
+        {
+            Debug.LogWarning("ShotgunWeapon: firePoint not assigned!", this);
+            return;
         }
 
+        Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        Vector2 baseDir = (mouseWorld - (Vector2)firePoint.position).normalized;
+
+        for (int i = 0; i < pelletCount; i++)
+        {
+            float offset = Random.Range(-spreadAngle * 0.5f, spreadAngle * 0.5f);
+            Vector2 spreadDir = RotateVector(baseDir, offset);
+
+            GameObject go = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+
+            // Support both pellet types: the new ShotgunPellet or the generic Bullet
+            ShotgunPellet sp = go.GetComponent<ShotgunPellet>();
+            if (sp != null)
+            {
+                sp.Initialize(spreadDir, CalculateDamage(), data.damageType, vfx);
+            }
+            else
+            {
+                Bullet b = go.GetComponent<Bullet>();
+                if (b != null) b.Initialize(spreadDir, CalculateDamage(), data.damageType, vfx);
+            }
+        }
+
+        // Muzzle flash (handled by VFXController)
         vfx?.PlayMuzzleFlash();
     }
 
@@ -59,27 +92,22 @@ public class ShotgunWeapon : WeaponBase
     {
         if (playerRb == null) return;
 
-        Vector2 mouseScreen = Mouse.current.position.ReadValue();
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreen);
+        Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        Vector2 shootDir = (mouseWorld - (Vector2)transform.position).normalized;
+        Vector2 recoilDir = -shootDir;
 
-        // Recoil goes OPPOSITE to shoot direction
-        Vector2 shootDirection = (mousePos - (Vector2)transform.position).normalized;
-        Vector2 recoilDirection = -shootDirection;
-
-        // Cancel current velocity for consistent recoil feel
         if (recoilCancelVelocity)
             playerRb.linearVelocity = Vector2.zero;
 
-        playerRb.AddForce(recoilDirection * recoilForce, ForceMode2D.Impulse);
+        playerRb.AddForce(recoilDir * recoilForce, ForceMode2D.Impulse);
     }
 
-    // Rotates a 2D vector by given degrees
-    private Vector2 RotateVector(Vector2 v, float degrees)
+    /// <summary>Rotates a 2D vector by the given angle in degrees.</summary>
+    private static Vector2 RotateVector(Vector2 v, float degrees)
     {
         float rad = degrees * Mathf.Deg2Rad;
-        return new Vector2(
-            v.x * Mathf.Cos(rad) - v.y * Mathf.Sin(rad),
-            v.x * Mathf.Sin(rad) + v.y * Mathf.Cos(rad)
-        );
+        float cos = Mathf.Cos(rad);
+        float sin = Mathf.Sin(rad);
+        return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
     }
 }

@@ -19,29 +19,14 @@ public class Bullet2 : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        /*if (other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Player hit!");
             other.GetComponent<PlayerHealth>().TakeDamage(1);
             Destroy(gameObject);
-        }*/
-
-        //if (other.CompareTag("Ground") || other.CompareTag("Decorations") || other.CompareTag("Wall"))
-        //{
-        //    Destroy(gameObject);
-        //}
-
-        void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                other.GetComponent<PlayerHealth>().TakeDamage(1);
-                Destroy(gameObject);
-                return;
-            }
-            if (other.CompareTag("Ground") || other.CompareTag("Wall"))
-                Destroy(gameObject);
+            return;
         }
+        if (other.CompareTag("Ground") || other.CompareTag("Wall"))
+            Destroy(gameObject);
     }
 }
 

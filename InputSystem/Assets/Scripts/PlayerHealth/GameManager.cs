@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour
     {
         if (GameOver && Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

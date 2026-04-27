@@ -4,12 +4,13 @@ public class PlayerHealth : MonoBehaviour
 {
     public int maxLives = 3;
     public int currentLives;
-
     private bool isDead = false;
 
     void Start()
     {
+        // FIX: always reset to maxLives at start, regardless of serialized value
         currentLives = maxLives;
+        isDead = false;
     }
 
     public void TakeDamage(int amount)
@@ -19,20 +20,21 @@ public class PlayerHealth : MonoBehaviour
         currentLives -= amount;
 
         if (currentLives <= 0)
-        {
             Die();
-        }
+    }
+
+    // FIX: added Revive() so PlayerRespawn or future systems can bring the player back
+    public void Revive()
+    {
+        isDead = false;
+        currentLives = maxLives;
+        gameObject.SetActive(true);
     }
 
     void Die()
     {
         isDead = true;
-
-        // Paslepiame žaidėją
         gameObject.SetActive(false);
-
-        // Pranešame GameManager
         GameManager.Instance.PlayerDied();
     }
 }
-

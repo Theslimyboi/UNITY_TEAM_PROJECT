@@ -1,8 +1,19 @@
 using UnityEngine;
 
+// NPCMeleeEnemy - patrols between two points, chases and damages the player on contact.
+//
+// IMPORTANT SETUP NOTE:
+// This script deals damage via OnTriggerEnter2D. For this to fire, the enemy's
+// collider must have "Is Trigger" = TRUE. But a trigger collider has no physics -
+// the enemy will fall through the floor.
+//
+// RECOMMENDED FIX: Use OnCollisionEnter2D instead (see bottom of this file),
+// keep "Is Trigger" = FALSE on the enemy's main collider. Add a SEPARATE child
+// GameObject with a slightly larger trigger collider for the damage zone.
+// This script uses OnCollisionEnter2D so the enemy can stand on the ground.
+
 public class NPCMeleeEnemy : MonoBehaviour
 {
-    // Melee NPC status
     private enum EnemyState { Patrolling, Chasing }
     private EnemyState currentState;
 
@@ -25,9 +36,14 @@ public class NPCMeleeEnemy : MonoBehaviour
 
     [Header("Aggro Settings")]
     public float aggroStayTime = 2f;
+
+    [Header("Damage")]
+    public int contactDamage = 1;          // FIX: exposed so you can tune it in Inspector
+    public float damageCooldown = 1f;      // FIX: prevents hitting player every frame on contact
+    private float damageTimer = 0f;
+
     private float aggroTimer;
     private Vector2 lastKnownPlayerPos;
-
     private Transform currentTarget;
     private Transform player;
     private Rigidbody2D rb;
@@ -37,12 +53,9 @@ public class NPCMeleeEnemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        // Give Player a tag so npc's can detect
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
-        {
             player = playerObj.transform;
-        }
 
         currentTarget = pointB;
         currentState = EnemyState.Patrolling;
@@ -50,179 +63,112 @@ public class NPCMeleeEnemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Keep checking if npc can see the player
         bool canSeePlayerNow = IsPlayerInDetectionRange();
 
         if (canSeePlayerNow)
         {
-            // If player is seen, reset timer and update last known position
             aggroTimer = aggroStayTime;
             lastKnownPlayerPos = player.position;
             currentState = EnemyState.Chasing;
         }
         else
         {
-            // If player is lost, count down the timer
             if (aggroTimer > 0)
-            {
                 aggroTimer -= Time.fixedDeltaTime;
-            }
             else if (currentState == EnemyState.Chasing)
             {
-                // Only go back to patrolling when timer reaches zero
                 currentState = EnemyState.Patrolling;
                 SetReturnTarget();
             }
         }
 
+        // FIX: tick damage cooldown in FixedUpdate
+        if (damageTimer > 0)
+            damageTimer -= Time.fixedDeltaTime;
+
         switch (currentState)
         {
-            case EnemyState.Patrolling:
-                PatrolLogic(); // Removed parameter to keep it clean
-                break;
-            case EnemyState.Chasing:
-                ChaseLogic(canSeePlayerNow);
-                break;
+            case EnemyState.Patrolling: PatrolLogic(); break;
+            case EnemyState.Chasing: ChaseLogic(canSeePlayerNow); break;
         }
     }
 
-    // Patrolling
     void PatrolLogic()
     {
         bool isGroundAhead = Physics2D.Raycast(groundCheck.position, Vector2.down, groundRayDistance, groundLayer);
-
         if (!isGroundAhead)
-        {
-            if (currentTarget == pointB)
-            {
-                currentTarget = pointA;
-            }
-            else
-            {
-                currentTarget = pointB;
-            }
-        }
+            currentTarget = (currentTarget == pointB) ? pointA : pointB;
 
-        // Checking distance on X axis
         float distanceToTarget = Mathf.Abs(transform.position.x - currentTarget.position.x);
-
         if (distanceToTarget < 0.2f)
-        {
-            if (currentTarget == pointB)
-            {
-                currentTarget = pointA;
-            }
-            else
-            {
-                currentTarget = pointB;
-            }
-        }
+            currentTarget = (currentTarget == pointB) ? pointA : pointB;
 
         MoveTowards(currentTarget.position, patrolSpeed);
     }
 
-    // Chasing the player logic
     void ChaseLogic(bool canSeePlayerNow)
     {
         Vector2 target = canSeePlayerNow ? (Vector2)player.position : lastKnownPlayerPos;
-
         float directionToTarget = target.x - transform.position.x;
         bool playerIsRight = directionToTarget > 0;
-
-        
         Flip(playerIsRight);
 
         bool isGroundAhead = Physics2D.Raycast(groundCheck.position, Vector2.down, groundRayDistance, groundLayer);
         bool isWallAhead = Physics2D.Raycast(wallCheck.position, isFacingRight ? Vector2.right : Vector2.left, wallRayDistance, groundLayer);
 
         if (isGroundAhead && !isWallAhead)
-        {
             MoveTowards(target, chaseSpeed);
-        }
         else
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
             if (!canSeePlayerNow && Mathf.Abs(directionToTarget) > detectionRange / 2)
-            {
                 aggroTimer = 0;
-            }
         }
     }
 
-    // Helper to decide where to go back after chasing
     void SetReturnTarget()
     {
-        if (Vector2.Distance(transform.position, pointA.position) < Vector2.Distance(transform.position, pointB.position))
-        {
-            currentTarget = pointA;
-        }
-        else
-        {
-            currentTarget = pointB;
-        }
+        currentTarget = (Vector2.Distance(transform.position, pointA.position) <
+                         Vector2.Distance(transform.position, pointB.position))
+                        ? pointA : pointB;
     }
 
-    // Npc moving
     void MoveTowards(Vector2 targetPos, float speed)
     {
         float directionX = targetPos.x - transform.position.x;
-
         if (Mathf.Abs(directionX) < 0.1f)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             return;
         }
-
         float moveDir = (directionX > 0) ? 1 : -1;
         rb.linearVelocity = new Vector2(moveDir * speed, rb.linearVelocity.y);
-
-        // Flip sprite so it matches the moving direction
         Flip(moveDir > 0);
     }
 
-    // Player detection
     bool IsPlayerInDetectionRange()
     {
-        if (player == null)
-        {
-            return false;
-        }
+        if (player == null) return false;
 
-        // Calculate which direction is the player at
         Vector2 directionToPlayer = (player.position - transform.position).normalized;
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        // Checking if the player is in the range of vision
         if (distanceToPlayer < detectionRange)
         {
-            // Checking if the player is behind another npc
             Vector2 facingDirection = isFacingRight ? Vector2.right : Vector2.left;
-
             float angle = Vector2.Angle(facingDirection, directionToPlayer);
-
-            // If chasing, widen vision angle to 180 (half circle) so jumps don't break aggro
             float currentMaxAngle = (currentState == EnemyState.Chasing) ? 180f : 90f;
 
             if (angle < currentMaxAngle)
             {
-                // We direct the vision to the player and check if there is a wall between the player and npc
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer, detectionRange, groundLayer | playerLayer);
-
-                if (hit.collider != null)
-                {
-                    // If the vision "indicator" detects player first, then there is no wall between them
-                    if (hit.collider.CompareTag("Player"))
-                    {
-                        return true;
-                    }
-                }
+                if (hit.collider != null && hit.collider.CompareTag("Player"))
+                    return true;
             }
         }
         return false;
     }
 
-    // Fliping sprite
     void Flip(bool faceRight)
     {
         if (isFacingRight != faceRight)
@@ -234,34 +180,38 @@ public class NPCMeleeEnemy : MonoBehaviour
         }
     }
 
-    // Visuals for npc vision, patroling range
+    // FIX: use OnCollisionStay2D (not OnTriggerEnter2D) so the enemy's collider
+    // can stay non-trigger and still stand on the ground.
+    // Also added damageCooldown so the player isn't hit every frame.
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player") && damageTimer <= 0f)
+        {
+            collision.collider.GetComponent<PlayerHealth>()?.TakeDamage(contactDamage);
+            damageTimer = damageCooldown;
+            Debug.Log("Player took melee damage!");
+        }
+    }
+
     private void OnDrawGizmos()
     {
-        // Yellow laser is the path route, from point A to point B
         if (pointA != null && pointB != null)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(pointA.position, pointB.position);
         }
-
-        // When npc finds a player, red laser appears towards the player to see the vision, when aggro is on
         if (player != null && currentState == EnemyState.Chasing)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, lastKnownPlayerPos);
         }
-
-        // Blue sphere around is the real vision range
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-        // Green laser checks for ground
         if (groundCheck != null)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * groundRayDistance);
         }
-
         if (wallCheck != null)
         {
             Gizmos.color = Color.red;
@@ -269,14 +219,4 @@ public class NPCMeleeEnemy : MonoBehaviour
             Gizmos.DrawLine(wallCheck.position, wallCheck.position + dir * wallRayDistance);
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            other.GetComponent<PlayerHealth>().TakeDamage(1);
-            Debug.Log("Player took melee damage!");
-        }
-    }
-
 }
