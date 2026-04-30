@@ -1,0 +1,12 @@
+Add shotgun PNG to player
+make PNG follow the mouse and flip like player
+make a firepoint to the end of a shotgun barrel
+make a firepoint be connected to it so it would turn with the shotgun
+make visuals for the bullets
+bug fix whatever happens with bullets
+
+Make SMG if it is present inside the visuals by the time I am done with the shotgun
+
+Maybe when I am done do UI
+
+And afte rall of this maybe ,=make a shooter enemy have SMG and be a fixed enemy on the ledges
