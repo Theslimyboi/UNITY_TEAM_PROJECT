@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     // For example we can change move speed, jump power and so on 
 
     public Rigidbody2D rb;
+    public Animator animator;
     public CapsuleCollider2D playerCollider;
     bool isFacingRight = true;
 
@@ -136,6 +137,19 @@ public class PlayerMovement : MonoBehaviour
 
         HandleWalkingSound();
         wasGrounded = isGrounded;
+
+        HandleWalkingSound();
+        wasGrounded = isGrounded;
+
+        float moveSpeedForAnim = Mathf.Abs(rb.linearVelocity.x);
+        animator.SetFloat("Speed", moveSpeedForAnim);
+
+        animator.SetBool("isGrounded", isGrounded);
+
+        animator.SetBool("isWallGrabbing", isWallGrabbing);
+        animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        animator.SetBool("isSliding", isSliding);
+
     }
 
     // Lets player move left or right 

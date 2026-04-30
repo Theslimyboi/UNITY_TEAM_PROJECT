@@ -1,0 +1,315 @@
+fileFormatVersion: 2
+guid: 2d305bc85bdfd504590f457137c29001
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1824470553010027895
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_0
+  - first:
+      213: 8834413818659304696
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_1
+  - first:
+      213: 5435112579695543473
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_2
+  - first:
+      213: -55493603197064870
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_3
+  - first:
+      213: -6384566914847928930
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_4
+  - first:
+      213: -3611042721732566950
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_5
+  - first:
+      213: 474293544444158829
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_6
+  - first:
+      213: 6379991578643513259
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_7
+  - first:
+      213: -5416464432570486137
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_8
+  - first:
+      213: -3313868894262893867
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_9
+  - first:
+      213: -2513497404094708574
+    second: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 250
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_0
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 180
+        width: 85
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77db25f2d42d15910800000000000000
+      internalID: 1824470553010027895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_1
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 179
+        width: 92
+        height: 155
+      alignment: 9
+      pivot: {x: 0.51428705, y: 0.48304}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f47df3bf842a9a70800000000000000
+      internalID: 8834413818659304696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_2
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 179
+        width: 95
+        height: 131
+      alignment: 9
+      pivot: {x: 0.5184474, y: 0.5066892}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b4820348166d6b40800000000000000
+      internalID: 5435112579695543473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_3
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 179
+        width: 89
+        height: 149
+      alignment: 9
+      pivot: {x: 0.48030758, y: 0.5000001}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a59e126acd8da3ff0800000000000000
+      internalID: -55493603197064870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_4
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 179
+        width: 118
+        height: 158
+      alignment: 9
+      pivot: {x: 0.48886108, y: 0.51386505}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9d07c3c7367567a0800000000000000
+      internalID: -6384566914847928930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_9
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 14
+        width: 140
+        height: 140
+      alignment: 9
+      pivot: {x: 0.47496367, y: 0.49061155}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d26e3d5cc5c202d0800000000000000
+      internalID: -3313868894262893867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDashingHop-ezgif.com-gif-to-sprite-converter_10
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 23
+        width: 137
+        height: 116
+      alignment: 9
+      pivot: {x: 0.48720768, y: 0.49244624}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a481159d634e1dd0800000000000000
+      internalID: -2513497404094708574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 20fc67afee725704cb0a46e9cebcabe6
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_0: 1824470553010027895
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_1: 8834413818659304696
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_10: -2513497404094708574
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_2: 5435112579695543473
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_3: -55493603197064870
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_4: -6384566914847928930
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_5: -3611042721732566950
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_6: 474293544444158829
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_7: 6379991578643513259
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_8: -5416464432570486137
+      PlayerDashingHop-ezgif.com-gif-to-sprite-converter_9: -3313868894262893867
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

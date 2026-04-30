@@ -1,0 +1,345 @@
+fileFormatVersion: 2
+guid: 53901cd0f0758344995ee533710db68b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5633996631917196047
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_0
+  - first:
+      213: 549044855418697825
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_1
+  - first:
+      213: -6270408220633505212
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_2
+  - first:
+      213: -521435385404033478
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_3
+  - first:
+      213: 2632945005797046454
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_4
+  - first:
+      213: -8473884193561703721
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_5
+  - first:
+      213: 4370933054810251923
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_6
+  - first:
+      213: -4490152816747533396
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_7
+  - first:
+      213: 726498566932188221
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_8
+  - first:
+      213: 3805894823667479552
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_9
+  - first:
+      213: 7256184344751230126
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_10
+  - first:
+      213: 7578877766776413687
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_11
+  - first:
+      213: -3068322022633569216
+    second: PlayerDeath-ezgif.com-gif-to-sprite-converter_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 250
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_0
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 180
+        width: 64
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fc04d8d9e500d1b0800000000000000
+      internalID: -5633996631917196047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_1
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 180
+        width: 76
+        height: 163
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 168bcf413699e9700800000000000000
+      internalID: 549044855418697825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_2
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 180
+        width: 82
+        height: 157
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 442637402f80bf8a0800000000000000
+      internalID: -6270408220633505212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_3
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 179
+        width: 104
+        height: 113
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a367ca7974d73c8f0800000000000000
+      internalID: -521435385404033478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_4
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 179
+        width: 107
+        height: 116
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b8fba768891a8420800000000000000
+      internalID: 2632945005797046454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_9
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 0
+        width: 98
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 004b2397d2141d430800000000000000
+      internalID: 3805894823667479552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_10
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 0
+        width: 101
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eacc5a5773523b460800000000000000
+      internalID: 7256184344751230126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlayerDeath-ezgif.com-gif-to-sprite-converter_12
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 0
+        width: 133
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0440b6880612b65d0800000000000000
+      internalID: -3068322022633569216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 1ea482c44e4556f45819db45e4c11eae
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_0: -5633996631917196047
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_1: 549044855418697825
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_10: 7256184344751230126
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_11: 7578877766776413687
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_12: -3068322022633569216
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_2: -6270408220633505212
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_3: -521435385404033478
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_4: 2632945005797046454
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_5: -8473884193561703721
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_6: 4370933054810251923
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_7: -4490152816747533396
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_8: 726498566932188221
+      PlayerDeath-ezgif.com-gif-to-sprite-converter_9: 3805894823667479552
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

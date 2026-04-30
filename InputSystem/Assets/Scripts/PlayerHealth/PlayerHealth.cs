@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
+    private Animator animator;
     public int maxLives = 3;
     public int currentLives;
     private bool isDead = false;
@@ -11,6 +13,7 @@ public class PlayerHealth : MonoBehaviour
         // FIX: always reset to maxLives at start, regardless of serialized value
         currentLives = maxLives;
         isDead = false;
+        animator = GetComponent<Animator>();
     }
 
     public void TakeDamage(int amount)
@@ -34,7 +37,21 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
         isDead = true;
+        animator.SetBool("isDead", true);
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null) rb.linearVelocity = Vector2.zero;
+
+        StartCoroutine(DieAfterAnimation());
+    }
+
+    IEnumerator DieAfterAnimation()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.PlayerDied();
+
         gameObject.SetActive(false);
-        GameManager.Instance.PlayerDied();
     }
 }
