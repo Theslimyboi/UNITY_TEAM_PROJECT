@@ -205,10 +205,10 @@ TextureImporter:
       name: PlayerDeath-ezgif.com-gif-to-sprite-converter_3
       rect:
         serializedVersion: 2
-        x: 491
+        x: 492
         y: 179
-        width: 104
-        height: 113
+        width: 103
+        height: 161
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -230,7 +230,7 @@ TextureImporter:
         x: 635
         y: 179
         width: 107
-        height: 116
+        height: 174
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -249,10 +249,10 @@ TextureImporter:
       name: PlayerDeath-ezgif.com-gif-to-sprite-converter_9
       rect:
         serializedVersion: 2
-        x: 23
+        x: 24
         y: 0
-        width: 98
-        height: 94
+        width: 97
+        height: 143
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -274,7 +274,7 @@ TextureImporter:
         x: 179
         y: 0
         width: 101
-        height: 76
+        height: 146
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -296,7 +296,7 @@ TextureImporter:
         x: 309
         y: 0
         width: 133
-        height: 34
+        height: 144
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
