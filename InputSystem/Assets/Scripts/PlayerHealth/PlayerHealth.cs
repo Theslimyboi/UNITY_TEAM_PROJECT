@@ -31,6 +31,8 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = false;
         currentLives = maxLives;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null) rb.bodyType = RigidbodyType2D.Dynamic;
         gameObject.SetActive(true);
     }
 
@@ -40,7 +42,11 @@ public class PlayerHealth : MonoBehaviour
         animator.SetBool("isDead", true);
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null) rb.linearVelocity = Vector2.zero;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Static;
+        }
 
         StartCoroutine(DieAfterAnimation());
     }
