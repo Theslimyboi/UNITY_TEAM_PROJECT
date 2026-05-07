@@ -1,15 +1,16 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelTeleport : MonoBehaviour
+public class Level1Teleport : MonoBehaviour
 {
-    [Header("Next scene name")]
     public string sceneToLoad;
+    public int currentLevelNumber;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            LevelProgress.UnlockNextLevel(currentLevelNumber);
             SceneManager.LoadScene(sceneToLoad);
         }
     }

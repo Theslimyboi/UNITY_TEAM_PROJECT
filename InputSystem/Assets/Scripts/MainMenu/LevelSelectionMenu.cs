@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelSelection : MonoBehaviour
+public class LevelSelectionMenu : MonoBehaviour
 {
     [Header("Menu")]
     public GameObject mainMenuArea;
@@ -17,4 +17,24 @@ public class LevelSelection : MonoBehaviour
         levelSelectionArea.SetActive(false);
         mainMenuArea.SetActive(true);
     }
+
+    public void RefreshButtons()
+    {
+        LevelButton[] buttons = GetComponentsInChildren<LevelButton>(true);
+
+        foreach (var btn in buttons)
+        {
+            btn.Refresh(); // priverstinai atnaujina būseną
+        }
+    }
+
+    public void OpenMenu()
+    {
+        mainMenuArea.SetActive(false);
+        levelSelectionArea.SetActive(true);
+        RefreshButtons();
+    }
+
+
+
 }

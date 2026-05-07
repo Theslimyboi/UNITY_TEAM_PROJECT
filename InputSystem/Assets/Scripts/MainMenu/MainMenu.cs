@@ -17,6 +17,9 @@ public class MainMenu : MonoBehaviour
     {
         mainMenuArea.SetActive(false);
         levelSelectionArea.SetActive(true);
+
+        // SURANDA LevelSelectionMenu ir atnaujina mygtukus
+        FindObjectOfType<LevelSelectionMenu>().RefreshButtons();
     }
 
     public void QuitGame()
