@@ -1,34 +1,29 @@
 using UnityEngine;
 
-// Attach to the Bullet prefab
-// Requires: Rigidbody2D, CircleCollider2D (Is Trigger = true)
+// Attach to Bullet prefab.
+// Requires: Rigidbody2D (Gravity Scale=0, Continuous), CircleCollider2D (Is Trigger=true)
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private float speed = 20f;
+
     private float damage;
     private DamageType damageType;
     private VFXController vfx;
-
-    [SerializeField] private float speed = 15f;
     private Rigidbody2D rb;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, 3f); // Auto-destroy after 3 seconds
+        Destroy(gameObject, 3f);
     }
 
-    // Called by RangedWeapon after spawning the bullet
     public void Initialize(Vector2 dir, float dmg, DamageType type, VFXController vfxController)
     {
         damage = dmg;
         damageType = type;
         vfx = vfxController;
-
         rb.linearVelocity = dir * speed;
-
-        // Rotate bullet sprite to face movement direction
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.AngleAxis(Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg, Vector3.forward);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -39,9 +34,12 @@ public class Bullet : MonoBehaviour
             vfx?.PlayHitEffect(transform.position, damageType);
             Destroy(gameObject);
         }
-        else if (other.CompareTag("Ground"))
+        else if (other.CompareTag("Ground") || other.CompareTag("Wall")
+             || other.gameObject.layer == LayerMask.NameToLayer("Wall")
+             || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Destroy(gameObject);
         }
+        // Ignores everything else (other bullets, player, decorations)
     }
 }

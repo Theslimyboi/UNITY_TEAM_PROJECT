@@ -1,7 +1,5 @@
 using UnityEngine;
 
-// Static damage system — no need to attach to any object
-// Applies damage to enemies and handles damage type modifiers
 public static class DamageSystem
 {
     public static void ApplyDamage(GameObject target, float damage, DamageType damageType)
@@ -11,10 +9,8 @@ public static class DamageSystem
 
         float finalDamage = CalculateDamageWithType(damage, damageType, target);
         health.TakeDamage(finalDamage);
-        Debug.Log($"{target.name} took {finalDamage} {damageType} damage");
     }
 
-    // Applies damage type multipliers and status effects
     private static float CalculateDamageWithType(float baseDamage, DamageType type, GameObject target)
     {
         float multiplier = 1f;
@@ -36,6 +32,7 @@ public static class DamageSystem
                     multiplier = 1f / stats.lightningResistance;
                     break;
                 case DamageType.Poison:
+                    multiplier = 1f / stats.poisonResistance; // was ignoring resistance before
                     ApplyStatusEffect(target, StatusEffect.Poisoned, 5f);
                     break;
             }
@@ -46,8 +43,6 @@ public static class DamageSystem
 
     private static void ApplyStatusEffect(GameObject target, StatusEffect effect, float duration)
     {
-        StatusEffectController controller = target.GetComponent<StatusEffectController>();
-        controller?.ApplyEffect(effect, duration);
+        target.GetComponent<StatusEffectController>()?.ApplyEffect(effect, duration);
     }
 }
-

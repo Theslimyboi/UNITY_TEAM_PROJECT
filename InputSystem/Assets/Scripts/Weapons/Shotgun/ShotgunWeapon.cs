@@ -1,15 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Shotgun with spread, recoil, full VFX support, and mouse aiming.
-// Attach to Shotgun GameObject under Player.
-// Inspector checklist:
-//   data            -> ShotgunData ScriptableObject
-//   firePoint       -> FirePoint child transform (place at barrel tip)
-//   vfx             -> VFXController on this same GameObject
-//   ammo            -> AmmoSystem on this same GameObject (or null = infinite)
-//   bulletPrefab    -> ShotgunPellet prefab
-
+// Attach to Shotgun child under Player.
+// Hierarchy: Player > Shotgun (this script + SpriteRenderer) > FirePoint
 public class ShotgunWeapon : WeaponBase
 {
     [Header("Shotgun Settings")]
@@ -18,16 +11,18 @@ public class ShotgunWeapon : WeaponBase
     public GameObject bulletPrefab;
 
     [Header("Recoil Settings")]
-    public float recoilForce = 15f;
+    public float recoilForce = 5f;
     public bool recoilCancelVelocity = false;
 
     private Rigidbody2D playerRb;
     private SpriteRenderer sr;
+    private Transform playerTransform;
 
     void Awake()
     {
         playerRb = GetComponentInParent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        playerTransform = transform.parent;
     }
 
     void LateUpdate()
@@ -42,15 +37,11 @@ public class ShotgunWeapon : WeaponBase
         Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2 toMouse = mouseWorld - (Vector2)transform.position;
 
-        bool playerFacingLeft = transform.parent != null && transform.parent.localScale.x < 0f;
-
+        bool playerFacingLeft = playerTransform != null && playerTransform.localScale.x < 0f;
         if (sr != null) sr.flipY = playerFacingLeft ? toMouse.x < 0f : toMouse.x > 0f;
 
         float angle = Mathf.Atan2(toMouse.y, toMouse.x) * Mathf.Rad2Deg + 180f;
-
-        // When player faces left, add another 180° so the gun still tracks the mouse correctly
         if (playerFacingLeft) angle += 180f;
-
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
@@ -66,8 +57,7 @@ public class ShotgunWeapon : WeaponBase
 
     private void Shoot()
     {
-        if (bulletPrefab == null) { Debug.LogWarning("ShotgunWeapon: bulletPrefab not assigned!", this); return; }
-        if (firePoint == null) { Debug.LogWarning("ShotgunWeapon: firePoint not assigned!", this); return; }
+        if (bulletPrefab == null || firePoint == null) return;
 
         Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2 baseDir = (mouseWorld - (Vector2)firePoint.position).normalized;
@@ -78,12 +68,9 @@ public class ShotgunWeapon : WeaponBase
             Vector2 spreadDir = RotateVector(baseDir, offset);
 
             GameObject go = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-
             ShotgunPellet sp = go.GetComponent<ShotgunPellet>();
-            if (sp != null)
-                sp.Initialize(spreadDir, CalculateDamage(), data.damageType, vfx);
-            else
-                go.GetComponent<Bullet>()?.Initialize(spreadDir, CalculateDamage(), data.damageType, vfx);
+            if (sp != null) sp.Initialize(spreadDir, CalculateDamage(), data.damageType, vfx);
+            else go.GetComponent<Bullet>()?.Initialize(spreadDir, CalculateDamage(), data.damageType, vfx);
         }
 
         vfx?.PlayMuzzleFlash();
@@ -93,11 +80,9 @@ public class ShotgunWeapon : WeaponBase
     {
         if (playerRb == null) return;
         Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        // Recoil is opposite to shoot direction, horizontal only so it doesn't push player up/down
-        Vector2 shootDir = (mouseWorld - (Vector2)firePoint.position).normalized;
-        Vector2 recoilDir = -shootDir;
+        Vector2 shootDir = (mouseWorld - (Vector2)playerRb.transform.position).normalized;
         if (recoilCancelVelocity) playerRb.linearVelocity = Vector2.zero;
-        playerRb.AddForce(recoilDir * recoilForce, ForceMode2D.Impulse);
+        playerRb.AddForce(-shootDir * recoilForce, ForceMode2D.Impulse);
     }
 
     private static Vector2 RotateVector(Vector2 v, float degrees)

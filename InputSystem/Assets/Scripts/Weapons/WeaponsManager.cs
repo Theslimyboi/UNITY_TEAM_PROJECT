@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Attach to the Player GameObject
-// Handles weapon switching via keyboard (1/2/3), scroll wheel and firing input
 public class WeaponManager : MonoBehaviour
 {
     [Header("Weapon List (assign in Inspector)")]
@@ -14,12 +12,14 @@ public class WeaponManager : MonoBehaviour
     private WeaponBase currentWeapon;
     private int currentIndex = 0;
 
+    // Scroll debounce — prevents a single scroll tick switching multiple weapons
+    private float lastScrollTime = -1f;
+    private const float ScrollCooldown = 0.12f;
+
     void Start()
     {
-        // Disable all weapons, then activate the starting one
         foreach (var weapon in weapons)
             weapon.gameObject.SetActive(false);
-
         SwitchToWeapon(startingWeapon);
     }
 
@@ -30,65 +30,52 @@ public class WeaponManager : MonoBehaviour
 
     void HandleInput()
     {
-        // Left mouse button — attack
-        if (Mouse.current.leftButton.isPressed)
-            currentWeapon?.Attack();
+        if (Mouse.current.leftButton.isPressed) currentWeapon?.Attack();
+        if (Mouse.current.leftButton.wasReleasedThisFrame) currentWeapon?.StopAttack();
 
-        // Release — stop attack
-        if (Mouse.current.leftButton.wasReleasedThisFrame)
-            currentWeapon?.StopAttack();
-
-        // Number keys 1-3 to switch weapons
         if (Keyboard.current.digit1Key.wasPressedThisFrame) SwitchToWeapon(0);
         if (Keyboard.current.digit2Key.wasPressedThisFrame) SwitchToWeapon(1);
         if (Keyboard.current.digit3Key.wasPressedThisFrame) SwitchToWeapon(2);
+        if (Keyboard.current.digit4Key.wasPressedThisFrame) SwitchToWeapon(3);
+        if (Keyboard.current.digit5Key.wasPressedThisFrame) SwitchToWeapon(4);
+        if (Keyboard.current.digit6Key.wasPressedThisFrame) SwitchToWeapon(5);
+        if (Keyboard.current.digit7Key.wasPressedThisFrame) SwitchToWeapon(6);
+        if (Keyboard.current.digit8Key.wasPressedThisFrame) SwitchToWeapon(7);
+        if (Keyboard.current.digit9Key.wasPressedThisFrame) SwitchToWeapon(8);
+        if (Keyboard.current.digit0Key.wasPressedThisFrame) SwitchToWeapon(9);
 
-        // Scroll wheel to cycle weapons
+        // Debounced scroll — was firing 3-5 times per scroll tick before
         float scroll = Mouse.current.scroll.ReadValue().y;
-        if (scroll > 0f) SwitchToWeapon((currentIndex + 1) % weapons.Length);
-        if (scroll < 0f) SwitchToWeapon((currentIndex - 1 + weapons.Length) % weapons.Length);
+        if (scroll != 0f && Time.time - lastScrollTime > ScrollCooldown)
+        {
+            lastScrollTime = Time.time;
+            if (scroll > 0f) SwitchToWeapon((currentIndex + 1) % weapons.Length);
+            else SwitchToWeapon((currentIndex - 1 + weapons.Length) % weapons.Length);
+        }
 
-        // R key to reload
+        // Use ammo reference directly — avoids GetComponent every frame
         if (Keyboard.current.rKey.wasPressedThisFrame)
-            currentWeapon?.GetComponent<AmmoSystem>()?.StartReload();
+            currentWeapon?.ammo?.StartReload();
     }
 
-    // Switches to the weapon at the given index
     public void SwitchToWeapon(int index)
     {
         if (index < 0 || index >= weapons.Length) return;
 
-        // Deactivate current weapon
         if (currentWeapon != null)
         {
+            currentWeapon.StopAllCoroutines(); // stops stuck attack coroutines on weapon swap
             currentWeapon.StopAttack();
             currentWeapon.gameObject.SetActive(false);
         }
 
-        // Activate new weapon
         currentIndex = index;
         currentWeapon = weapons[currentIndex];
         currentWeapon.gameObject.SetActive(true);
 
-        Debug.Log($"Switched to: {currentWeapon.data.weaponName}");
-        OnWeaponChanged(currentWeapon);
-    }
-
-    public void SwitchToNextWeapon() => SwitchToWeapon((currentIndex + 1) % weapons.Length);
-    public void SwitchToPreviousWeapon() => SwitchToWeapon((currentIndex - 1 + weapons.Length) % weapons.Length);
-
-    // Called when weapon changes — hook up UI updates here
-    private void OnWeaponChanged(WeaponBase newWeapon)
-    {
-        if (newWeapon.ammo != null)
-        {
-            //UIManager.Instance.UpdateAmmoUI(newWeapon.ammo.GetCurrentAmmo(), newWeapon.data.maxAmmo);
-        }
-        else
-        {
-            //UIManager.Instance.UpdateAmmoUI(0, 0); // For melee or infinite
-        }
-        // Example: UIManager.instance?.UpdateWeaponDisplay(newWeapon.data);
+        UIManager.Instance?.UpdateAmmoUI(
+            currentWeapon.ammo?.GetCurrentAmmo() ?? 0,
+            currentWeapon.ammo?.GetMaxAmmo() ?? 0);
     }
 
     public WeaponBase GetCurrentWeapon() => currentWeapon;

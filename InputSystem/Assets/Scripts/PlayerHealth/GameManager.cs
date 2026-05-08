@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameObject GameOverPanel;
+
     private bool GameOver = false;
 
     public AudioSource music;
@@ -21,10 +22,12 @@ public class GameManager : MonoBehaviour
     public void PlayerDied()
     {
         GameOver = true;
-        Time.timeScale = 0f; // sustabdo žaidimą
-        music.Pause();
-        player.sfxSource.Stop();
-        GameOverPanel.SetActive(true);
+        Time.timeScale = 0f; // stops the game
+
+        music?.Pause();                  // null-safe — won't crash if not assigned
+        player?.sfxSource?.Stop();       // null-safe
+        GameOverPanel?.SetActive(true);  // null-safe
+
     }
 
     void Update()
