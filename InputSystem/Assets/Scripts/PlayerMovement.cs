@@ -356,7 +356,6 @@ public class PlayerMovement : MonoBehaviour
     // If the player is holding any directional key to move next to a wall, the player will get "stuck" on to the wall 
     private void WallGrab()
     {
-
         // If the player is NOT on the ground and the collider is on the wall AND the player is moving left or right and is not sliding) 
         if (!isGrounded && WallCheck() && horizontalMovement != 0 && !isSliding)
         {
@@ -376,14 +375,12 @@ public class PlayerMovement : MonoBehaviour
                 sfxSource.PlayOneShot(PlayerWallHold);
                 wallHoldPlayed = true;
             }
-            else
-            {
-                wallHoldPlayed = false;
-            }
         }
         else
         {
             isWallGrabbing = false;
+            // Reset the sound flag only when we are NOT on the wall anymore
+            wallHoldPlayed = false;
         }
     }
 
