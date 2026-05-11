@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ShooterEnemyAI : MonoBehaviour
 {
@@ -46,8 +46,11 @@ public class ShooterEnemyAI : MonoBehaviour
 
     void Update()
     {
-        // FIX: null-check so no NullReferenceException if player is missing or dead
-        if (player == null || !player.gameObject.activeInHierarchy) { Patrol(); return; }
+        if (player == null || !player.gameObject.activeInHierarchy)
+        {
+            Patrol();
+            return;
+        }
 
         float distance = Vector2.Distance(transform.position, player.position);
 
@@ -57,9 +60,11 @@ public class ShooterEnemyAI : MonoBehaviour
             return;
         }
 
-        Vector2 dir = (player.position - shootPoint.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
+        // vietoj sukinėjimosi — tik horizontalus flip
+        if (player.position.x < transform.position.x)
+            transform.localScale = new Vector3(1, 1, 1);
+        else
+            transform.localScale = new Vector3(-1, 1, 1);
 
         if (cooldownTimer <= 0f)
         {
@@ -71,6 +76,7 @@ public class ShooterEnemyAI : MonoBehaviour
             cooldownTimer -= Time.deltaTime;
         }
     }
+
 
     void Shoot()
     {
