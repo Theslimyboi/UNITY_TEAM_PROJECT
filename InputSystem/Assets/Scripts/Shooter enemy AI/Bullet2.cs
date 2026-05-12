@@ -27,6 +27,20 @@ public class Bullet2 : MonoBehaviour
         }
         if (other.CompareTag("Ground") || other.CompareTag("Wall"))
             Destroy(gameObject);
+
+        
+            Debug.Log("Bullet hit: " + other.name);
+
+            if (other.CompareTag("Player"))
+            {
+                other.GetComponent<PlayerHealth>().TakeDamage(1);
+                Destroy(gameObject);
+                return;
+            }
+            if (other.CompareTag("Ground") || other.CompareTag("Wall"))
+                Destroy(gameObject);
+        
+
     }
 }
 

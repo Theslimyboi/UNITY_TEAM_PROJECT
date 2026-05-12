@@ -2,7 +2,7 @@
 
 public class ShooterEnemyAI : MonoBehaviour
 {
-    public Transform player;         // FIX: auto-found in Start() if not assigned
+    public Transform player;
     public GameObject bulletPrefab;
     public Transform shootPoint;
     public float detectionRange = 8f;
@@ -18,7 +18,6 @@ public class ShooterEnemyAI : MonoBehaviour
     {
         startPos = transform.position;
 
-        // FIX: auto-find player so it works even if not assigned in Inspector
         if (player == null)
         {
             GameObject p = GameObject.FindGameObjectWithTag("Player");
@@ -60,7 +59,7 @@ public class ShooterEnemyAI : MonoBehaviour
             return;
         }
 
-        // vietoj sukinėjimosi — tik horizontalus flip
+        // Horizontalus flip
         if (player.position.x < transform.position.x)
             transform.localScale = new Vector3(1, 1, 1);
         else
@@ -77,7 +76,6 @@ public class ShooterEnemyAI : MonoBehaviour
         }
     }
 
-
     void Shoot()
     {
         if (bulletPrefab == null)
@@ -88,6 +86,16 @@ public class ShooterEnemyAI : MonoBehaviour
 
         GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
         Vector2 direction = (player.position - shootPoint.position).normalized;
+
+        // Ignoruojam koliziją su šauliu
+        Collider2D bulletCol = bullet.GetComponent<Collider2D>();
+        Collider2D enemyCol = GetComponentInParent<Collider2D>();
+
+        if (bulletCol != null && enemyCol != null)
+            Physics2D.IgnoreCollision(bulletCol, enemyCol);
+
+
+
         bullet.GetComponent<Bullet2>().SetDirection(direction);
     }
 }
