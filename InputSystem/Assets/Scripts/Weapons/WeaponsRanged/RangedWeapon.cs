@@ -48,9 +48,10 @@ public class RangedWeapon : WeaponBase
 
     public override void StopAttack() { }
 
+    /*
     private void Shoot()
     {
-        if (ammo != null && !ammo.HasAmmo())
+        /*if (ammo != null && !ammo.HasAmmo())
             return; // nėra kulkų — nešaudom
 
         
@@ -69,8 +70,48 @@ public class RangedWeapon : WeaponBase
         GameObject bullet = Instantiate(bulletPrefab, firePointPos, Quaternion.identity);
         bullet.GetComponent<Bullet>()?.Initialize(direction, CalculateDamage(), data.damageType, vfx);
         vfx?.PlayMuzzleFlash();
-    }
 
+    if (ammo != null && !ammo.HasAmmo()) return;
+    if (bulletPrefab == null || firePoint == null) return;
+
+    Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+    bool facingLeft = playerTransform != null && playerTransform.localScale.x < 0f;
+
+    
+    Vector3 localPos = transform.InverseTransformPoint(firePoint.position);
+    if (facingLeft) localPos.y = -localPos.y;
+    Vector2 firePointPos = transform.TransformPoint(localPos);
+
+    Vector2 direction = (mouseWorld - firePointPos).normalized;
+
+    GameObject bullet = Instantiate(bulletPrefab, firePointPos, Quaternion.identity);
+    bullet.GetComponent<Bullet>()?.Initialize(direction, CalculateDamage(), data.damageType, vfx);
+    vfx?.PlayMuzzleFlash(firePointPos, transform.rotation);
+}
+    */
+
+    private void Shoot()
+    {
+        if (ammo != null && !ammo.HasAmmo()) return;
+        if (bulletPrefab == null || firePoint == null) return;
+
+        Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+        // Get the barrel length (X distance of firePoint in local space only)
+        float barrelLength = Mathf.Abs(firePoint.localPosition.x);
+
+        // Calculate aim direction purely from mouse
+        Vector2 aimDir = (mouseWorld - (Vector2)transform.position).normalized;
+
+        // Muzzle is always exactly barrelLength units along aim direction
+        Vector2 firePointPos = (Vector2)transform.position + aimDir * barrelLength + Vector2.up * firePoint.localPosition.y;
+
+        Vector2 direction = aimDir;
+
+        GameObject bullet = Instantiate(bulletPrefab, firePointPos, Quaternion.identity);
+        bullet.GetComponent<Bullet>()?.Initialize(direction, CalculateDamage(), data.damageType, vfx);
+        vfx?.PlayMuzzleFlash(firePointPos, transform.rotation);
+    }
     void Update()
     {
         if (Keyboard.current.rKey.wasPressedThisFrame)

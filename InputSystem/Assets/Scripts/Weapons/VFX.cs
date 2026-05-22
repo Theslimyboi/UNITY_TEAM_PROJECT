@@ -18,12 +18,45 @@ public class VFXController : MonoBehaviour
     public GameObject hitEffectPrefab;
     public GameObject[] damageTypeEffects; // Optional: different effect per damage type
 
-    // Spawns a muzzle flash at the fire point
+    [Header("Audio")]
+    public AudioClip shootSound;
+
+    private AudioSource audioSource;
+
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f; // 0 = 2D, 1 = 3D
+    }
+
+
+
+    public void PlayMuzzleFlash(Vector2 position, Quaternion rotation)
+    {
+        if (muzzleFlashPrefab == null) return;
+        GameObject flash = Instantiate(muzzleFlashPrefab, position, rotation);
+        Destroy(flash, 0.1f);
+        PlayShootSound();
+    }
+
+    // Keep the old one as fallback for anything else that calls it
     public void PlayMuzzleFlash()
     {
         if (muzzleFlashPrefab == null || muzzlePoint == null) return;
         GameObject flash = Instantiate(muzzleFlashPrefab, muzzlePoint.position, muzzlePoint.rotation);
         Destroy(flash, 0.1f);
+        PlayShootSound();
+    }
+
+    public void PlayShootSound()
+    {
+        if (shootSound != null)
+            audioSource.PlayOneShot(shootSound);
     }
 
     // Draws a trail from the fire point to the target position
