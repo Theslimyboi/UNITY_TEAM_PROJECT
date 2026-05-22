@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 // Works for Pistol, SMG, or any single-shot ranged weapon.
@@ -10,11 +10,13 @@ public class RangedWeapon : WeaponBase
 
     private SpriteRenderer sr;
     private Transform playerTransform;
+    //private AmmoSystem ammo;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
         playerTransform = transform.parent;
+        ammo = GetComponent<AmmoSystem>();
     }
 
     void LateUpdate()
@@ -48,18 +50,32 @@ public class RangedWeapon : WeaponBase
 
     private void Shoot()
     {
+        if (ammo != null && !ammo.HasAmmo())
+            return; // nėra kulkų — nešaudom
+
+        
+
         if (bulletPrefab == null || firePoint == null) return;
 
         Vector2 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        // When player is flipped, firePoint Y is mirrored � correct it back
         bool facingLeft = playerTransform != null && playerTransform.localScale.x < 0f;
         Vector2 firePointPos = firePoint.position;
+
         if (facingLeft)
             firePointPos.y = transform.position.y - (firePoint.position.y - transform.position.y);
+
         Vector2 direction = (mouseWorld - firePointPos).normalized;
 
         GameObject bullet = Instantiate(bulletPrefab, firePointPos, Quaternion.identity);
         bullet.GetComponent<Bullet>()?.Initialize(direction, CalculateDamage(), data.damageType, vfx);
         vfx?.PlayMuzzleFlash();
     }
+
+    void Update()
+    {
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+            ammo?.StartReload();
+    }
+
+
 }

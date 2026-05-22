@@ -17,7 +17,8 @@ public class WeaponData : ScriptableObject
     public DamageType damageType;
 
     [Header("Ammo / Fire Rate")]
-    public int maxAmmo = 30;                 // Set to 0 for infinite ammo
+    public int maxAmmo = 12;          // kulkos vienoje apkaboje
+    public int totalAmmo = 36;        // bendras šovinių kiekis (pvz. 3 apkabos)
     public float fireRate = 0.2f;            // Seconds between attacks
     public float reloadTime = 1.5f;
 
@@ -29,4 +30,10 @@ public class WeaponData : ScriptableObject
     public float manaCost = 10f;
     public float cooldownTime = 2f;
     public GameObject spellPrefab;           // Projectile spawned when casting
+
+    //[Header("Ammo Usage")]
+    //public int ammoPerShot = 1; // jei 0, reiškia naudoti pelletCount
+
+    [Header("Weapon Flags")]
+    public bool isShotgun = false;
 }

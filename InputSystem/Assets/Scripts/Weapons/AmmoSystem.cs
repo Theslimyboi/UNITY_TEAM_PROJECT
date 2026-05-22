@@ -1,53 +1,74 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class AmmoSystem : MonoBehaviour
 {
     private WeaponData data;
     private int currentAmmo;
+    private int totalAmmo;
     private bool isReloading = false;
 
     void Awake()
     {
         data = GetComponent<WeaponBase>()?.data;
-        if (data != null) currentAmmo = data.maxAmmo;
+        if (data != null)
+        {
+            currentAmmo = data.maxAmmo;
+            totalAmmo = data.totalAmmo;
+        }
     }
 
     public bool HasAmmo()
     {
-        if (data == null || data.maxAmmo == 0) return true;
+        if (data == null) return false;
+        if (data.maxAmmo == 0 && data.totalAmmo == 0) return false; // nėra ammo
         return currentAmmo > 0 && !isReloading;
     }
 
-    public void UseAmmo()
+    public void UseAmmo(int pelletCount = 4)
     {
-        if (data == null || data.maxAmmo == 0) return;
-        currentAmmo = Mathf.Max(0, currentAmmo - 1);
-        UIManager.Instance?.UpdateAmmoUI(currentAmmo, data.maxAmmo); // null-safe
-        if (currentAmmo <= 0) StartReload();
+        if (data == null) return;
+
+        if (data.weaponType == WeaponType.Melee)
+            return;
+
+        bool isShotgun = GetComponent<ShotgunWeapon>() != null;
+
+        int amount = isShotgun
+            ? pelletCount
+            : 1;
+
+        currentAmmo = Mathf.Max(0, currentAmmo - amount);
+
+        UIManager.Instance?.UpdateAmmoUI(currentAmmo, totalAmmo);
+
+        if (currentAmmo <= 0)
+            StartReload();
     }
+
+
 
     public void StartReload()
     {
-        if (!isReloading && data != null && currentAmmo < data.maxAmmo)
+        if (!isReloading && data != null && totalAmmo > 0 && currentAmmo < data.maxAmmo)
             StartCoroutine(ReloadCoroutine());
     }
 
     private IEnumerator ReloadCoroutine()
     {
         isReloading = true;
-        // Tell the weapon base we are reloading so CanAttack() blocks firing
-        WeaponBase wb = GetComponent<WeaponBase>();
-        if (wb != null) wb.SendMessage("OnReloadStart", SendMessageOptions.DontRequireReceiver);
-
         yield return new WaitForSeconds(data.reloadTime);
 
-        currentAmmo = data.maxAmmo;
+        int neededAmmo = data.maxAmmo - currentAmmo;
+        int ammoToLoad = Mathf.Min(neededAmmo, totalAmmo);
+        currentAmmo += ammoToLoad;
+        totalAmmo -= ammoToLoad;
+
         isReloading = false;
-        UIManager.Instance?.UpdateAmmoUI(currentAmmo, data.maxAmmo); // null-safe
+        UIManager.Instance?.UpdateAmmoUI(currentAmmo, totalAmmo);
     }
 
     public int GetCurrentAmmo() => currentAmmo;
-    public int GetMaxAmmo() => data != null ? data.maxAmmo : 0;
+    public int GetMaxAmmo() => totalAmmo;
     public bool IsReloading() => isReloading;
 }

@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
     [Header("UI Text References")]
-    public Text healthText;
-    public Text ammoText;
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI ammoText;
 
     private void Awake()
     {
@@ -20,10 +20,12 @@ public class UIManager : MonoBehaviour
         healthText.text = $"HP: {Mathf.CeilToInt(currentHP)} / {maxHP}";
     }
 
-    public void UpdateAmmoUI(int currentAmmo, int maxAmmo)
+    public void UpdateAmmoUI(int currentAmmo, int totalAmmo)
     {
-        if (maxAmmo == 0) ammoText.text = "Ammo: ∞";
-        else ammoText.text = $"Ammo: {currentAmmo} / {maxAmmo}";
+        if (totalAmmo <= 0 && currentAmmo <= 0)
+            ammoText.text = "Ammo: 0 / 0"; // viskas baigta
+        else
+            ammoText.text = $"Ammo: {currentAmmo} / {totalAmmo}";
     }
     void Start()
     {
