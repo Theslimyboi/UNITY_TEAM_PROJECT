@@ -21,37 +21,36 @@ public class AmmoSystem : MonoBehaviour
     public bool HasAmmo()
     {
         if (data == null) return false;
-        if (data.maxAmmo == 0 && data.totalAmmo == 0) return false; // nėra ammo
+        if (data.maxAmmo == 0 && data.totalAmmo == 0) return false;
         return currentAmmo > 0 && !isReloading;
     }
 
     public void UseAmmo(int pelletCount = 4)
     {
         if (data == null) return;
-
-        if (data.weaponType == WeaponType.Melee)
-            return;
+        if (data.weaponType == WeaponType.Melee) return;
 
         bool isShotgun = GetComponent<ShotgunWeapon>() != null;
-
-        int amount = isShotgun
-            ? pelletCount
-            : 1;
+        int amount = isShotgun ? pelletCount : 1;
 
         currentAmmo = Mathf.Max(0, currentAmmo - amount);
-
         UIManager.Instance?.UpdateAmmoUI(currentAmmo, totalAmmo);
 
         if (currentAmmo <= 0)
             StartReload();
     }
 
-
-
     public void StartReload()
     {
         if (!isReloading && data != null && totalAmmo > 0 && currentAmmo < data.maxAmmo)
             StartCoroutine(ReloadCoroutine());
+    }
+
+    // Cancels an in-progress reload — called when switching weapons
+    public void CancelReload()
+    {
+        StopAllCoroutines();
+        isReloading = false;
     }
 
     private IEnumerator ReloadCoroutine()
@@ -63,8 +62,8 @@ public class AmmoSystem : MonoBehaviour
         int ammoToLoad = Mathf.Min(neededAmmo, totalAmmo);
         currentAmmo += ammoToLoad;
         totalAmmo -= ammoToLoad;
-
         isReloading = false;
+
         UIManager.Instance?.UpdateAmmoUI(currentAmmo, totalAmmo);
     }
 
