@@ -3,10 +3,23 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    [Header("Panels")]
-    public GameObject pauseMenuPanel;      
-    public GameObject optionsMenuPanel;     
-    public GameObject areYouSurePanel;      
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void InitializeTotalVolume()
+    {
+        if (PlayerPrefs.HasKey("MusicVolume"))
+        {
+            AudioListener.volume = PlayerPrefs.GetFloat("MusicVolume");
+        }
+        else
+        {
+            AudioListener.volume = 0.75f;
+        }
+    }
+
+    [Header("UI Panels")]
+    public GameObject pauseMenuPanel;
+    public GameObject optionsMenuPanel;
+    public GameObject areYouSurePanel;
 
     [Header("Buttons")]
     public GameObject returnBtn;
@@ -14,6 +27,10 @@ public class PauseMenu : MonoBehaviour
     public GameObject exitBtn;
 
     private bool isPaused = false;
+
+    void Start()
+    {
+    }
 
     void Update()
     {
@@ -61,13 +78,13 @@ public class PauseMenu : MonoBehaviour
     public void OpenSettings()
     {
         SetMainButtonsActive(false);
-        optionsMenuPanel.SetActive(true); 
+        optionsMenuPanel.SetActive(true);
     }
 
     public void OpenAreYouSure()
     {
-        SetMainButtonsActive(false); 
-        areYouSurePanel.SetActive(true); 
+        SetMainButtonsActive(false);
+        areYouSurePanel.SetActive(true);
     }
 
     public void BackToPauseMenu()
