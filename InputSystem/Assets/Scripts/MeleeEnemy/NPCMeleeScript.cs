@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 // NPCMeleeEnemy - patrols between two points, chases and damages the player on contact.
 //
@@ -41,6 +41,12 @@ public class NPCMeleeEnemy : MonoBehaviour
     public int contactDamage = 1;          // FIX: exposed so you can tune it in Inspector
     public float damageCooldown = 1f;      // FIX: prevents hitting player every frame on contact
     private float damageTimer = 0f;
+
+    [Header("Audio Settings")]
+    public AudioSource audioSource;        // pagrindinis garso šaltinis
+    public AudioClip walkClip;             // žingsnių garsas
+    public float walkThreshold = 0.1f;     // greičio slenkstis, nuo kurio groja žingsniai
+
 
     private float aggroTimer;
     private Vector2 lastKnownPlayerPos;
@@ -91,6 +97,8 @@ public class NPCMeleeEnemy : MonoBehaviour
             case EnemyState.Patrolling: PatrolLogic(); break;
             case EnemyState.Chasing: ChaseLogic(canSeePlayerNow); break;
         }
+
+        HandleFootsteps();
     }
 
     void PatrolLogic()
@@ -219,4 +227,26 @@ public class NPCMeleeEnemy : MonoBehaviour
             Gizmos.DrawLine(wallCheck.position, wallCheck.position + dir * wallRayDistance);
         }
     }
+
+    private void HandleFootsteps()
+    {
+        if (audioSource == null || walkClip == null) return;
+
+        // Jei priešas juda
+        if (Mathf.Abs(rb.linearVelocity.x) > walkThreshold)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = walkClip;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            if (audioSource.isPlaying && audioSource.clip == walkClip)
+                audioSource.Stop();
+        }
+    }
+
 }

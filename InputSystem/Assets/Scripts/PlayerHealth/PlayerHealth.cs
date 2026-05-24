@@ -8,9 +8,12 @@ public class PlayerHealth : MonoBehaviour
     public int currentLives;
     private bool isDead = false;
 
+    [Header("Audio")]
+    public AudioSource audioSource;          // <-- pridėta
+    public AudioClip playerHurtClip;         // <-- pridėta
+
     void Start()
     {
-        // FIX: always reset to maxLives at start, regardless of serialized value
         currentLives = maxLives;
         isDead = false;
         animator = GetComponent<Animator>();
@@ -22,11 +25,14 @@ public class PlayerHealth : MonoBehaviour
 
         currentLives -= amount;
 
+        // --- ŽAIDĖJO SUŽALOJIMO GARSAS ---
+        if (audioSource != null && playerHurtClip != null)
+            audioSource.PlayOneShot(playerHurtClip);
+
         if (currentLives <= 0)
             Die();
     }
 
-    // FIX: added Revive() so PlayerRespawn or future systems can bring the player back
     public void Revive()
     {
         isDead = false;

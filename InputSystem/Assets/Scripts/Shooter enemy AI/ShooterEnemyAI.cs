@@ -10,6 +10,11 @@ public class ShooterEnemyAI : MonoBehaviour
     public float patrolSpeed = 2f;
     public float patrolDistance = 3f;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip shooterAttackClip;
+    public AudioClip enemyWalkClip;          // <-- nauja
+
     private Vector2 startPos;
     private bool movingRight = true;
     private float cooldownTimer = 0f;
@@ -31,6 +36,17 @@ public class ShooterEnemyAI : MonoBehaviour
         float leftLimit = startPos.x - patrolDistance;
         float rightLimit = startPos.x + patrolDistance;
 
+        // --- WALKING SOUND ---
+        if (audioSource != null && enemyWalkClip != null)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = enemyWalkClip;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+
         if (movingRight)
         {
             transform.position += Vector3.right * patrolSpeed * Time.deltaTime;
@@ -41,6 +57,12 @@ public class ShooterEnemyAI : MonoBehaviour
             transform.position += Vector3.left * patrolSpeed * Time.deltaTime;
             if (transform.position.x <= leftLimit) movingRight = true;
         }
+    }
+
+    void StopWalkingSound()
+    {
+        if (audioSource != null && audioSource.clip == enemyWalkClip)
+            audioSource.Stop();
     }
 
     void Update()
@@ -58,6 +80,9 @@ public class ShooterEnemyAI : MonoBehaviour
             Patrol();
             return;
         }
+
+        // --- STOP WALKING SOUND WHEN SHOOTING ---
+        StopWalkingSound();
 
         // Horizontalus flip
         if (player.position.x < transform.position.x)
@@ -84,17 +109,18 @@ public class ShooterEnemyAI : MonoBehaviour
             return;
         }
 
+        // --- SHOOTING SOUND ---
+        if (audioSource != null && shooterAttackClip != null)
+            audioSource.PlayOneShot(shooterAttackClip);
+
         GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
         Vector2 direction = (player.position - shootPoint.position).normalized;
 
-        // Ignoruojam koliziją su šauliu
         Collider2D bulletCol = bullet.GetComponent<Collider2D>();
         Collider2D enemyCol = GetComponentInParent<Collider2D>();
 
         if (bulletCol != null && enemyCol != null)
             Physics2D.IgnoreCollision(bulletCol, enemyCol);
-
-
 
         bullet.GetComponent<Bullet2>().SetDirection(direction);
     }

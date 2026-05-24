@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SniperAI : MonoBehaviour
 {
@@ -7,12 +7,17 @@ public class SniperAI : MonoBehaviour
     public LineRenderer laser;
 
     [Header("Range")]
-    public float detectionRange = 8f;   // how close player must be to trigger aiming
-    public float shootRange = 20f;      // how far the actual shot/laser travels
+    public float detectionRange = 8f;
+    public float shootRange = 20f;
 
     [Header("Timing")]
     public float aimTime = 1.5f;
     public float shootCooldown = 2f;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip sniperLockOnClip;     
+    public AudioClip sniperShootClip;      
 
     private bool isAiming = false;
     private float aimTimer = 0f;
@@ -21,7 +26,6 @@ public class SniperAI : MonoBehaviour
 
     void Start()
     {
-        // Auto-find player if not assigned in Inspector
         if (player == null)
         {
             GameObject p = GameObject.FindGameObjectWithTag("Player");
@@ -38,12 +42,17 @@ public class SniperAI : MonoBehaviour
 
         float distance = Vector2.Distance(gunPoint.position, player.position);
 
+        // --- FIKSAVIMO MOMENTAS ---
         if (distance < detectionRange && cooldownTimer <= 0f && !isAiming)
         {
             isAiming = true;
             aimTimer = aimTime;
             laser.enabled = true;
             SetLaserWidth(0.05f);
+
+            // GROJAM FIKSAVIMO GARSĄ
+            if (audioSource != null && sniperLockOnClip != null)
+                audioSource.PlayOneShot(sniperLockOnClip);
         }
 
         if (distance > detectionRange)
@@ -81,22 +90,21 @@ public class SniperAI : MonoBehaviour
         UpdateLaser();
         flashTimer = 0.1f;
 
+        // --- ŠŪVIO GARSAS ---
+        if (audioSource != null && sniperShootClip != null)
+            audioSource.PlayOneShot(sniperShootClip);
+
         int mask = ~LayerMask.GetMask("Enemy");
         RaycastHit2D hit = Physics2D.Raycast(
             gunPoint.position,
             (player.position - gunPoint.position).normalized,
-            shootRange,   // FIX: was detectionRange (3f), now uses shootRange (20f)
+            shootRange,
             mask
         );
 
         if (hit.collider != null && hit.collider.CompareTag("Player"))
         {
-            Debug.Log("Sniper hit the player!");
             hit.collider.GetComponent<PlayerHealth>().TakeDamage(2);
-        }
-        else
-        {
-            Debug.Log("Shot blocked by obstacle.");
         }
 
         isAiming = false;
@@ -110,7 +118,7 @@ public class SniperAI : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(
             gunPoint.position,
             direction,
-            shootRange,   // FIX: laser now reaches the full shoot distance
+            shootRange,
             mask
         );
 
