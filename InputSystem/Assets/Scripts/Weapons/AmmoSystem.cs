@@ -25,7 +25,7 @@ public class AmmoSystem : MonoBehaviour
         return currentAmmo > 0 && !isReloading;
     }
 
-    public void UseAmmo(int pelletCount = 4)
+    public void UseAmmo(int pelletCount = 1)
     {
         if (data == null) return;
         if (data.weaponType == WeaponType.Melee) return;
