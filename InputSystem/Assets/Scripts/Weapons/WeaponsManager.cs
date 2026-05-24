@@ -53,7 +53,6 @@ public class WeaponManager : MonoBehaviour
             else SwitchToWeapon((currentIndex - 1 + weapons.Length) % weapons.Length);
         }
 
-        // Use ammo reference directly — avoids GetComponent every frame
         if (Keyboard.current.rKey.wasPressedThisFrame)
             currentWeapon?.ammo?.StartReload();
     }
@@ -64,8 +63,9 @@ public class WeaponManager : MonoBehaviour
 
         if (currentWeapon != null)
         {
-            currentWeapon.StopAllCoroutines(); // stops stuck attack coroutines on weapon swap
+            currentWeapon.StopAllCoroutines();
             currentWeapon.StopAttack();
+            currentWeapon.ammo?.CancelReload(); // ← fixes stuck reload on weapon swap
             currentWeapon.gameObject.SetActive(false);
         }
 
