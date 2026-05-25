@@ -232,7 +232,19 @@ public class NPCMeleeEnemy : MonoBehaviour
     {
         if (audioSource == null || walkClip == null) return;
 
-        // Jei priešas juda
+        // --- DISTANCE CHECK ---
+        float dist = Vector2.Distance(transform.position, player.position);
+
+        // girdima tik jei žaidėjas yra arti (pvz. 12f)
+        if (dist > 12f)
+        {
+            // jei žaidėjas toli — nutildom žingsnius
+            if (audioSource.isPlaying && audioSource.clip == walkClip)
+                audioSource.Stop();
+            return;
+        }
+
+        // --- FOOTSTEP LOGIC ---
         if (Mathf.Abs(rb.linearVelocity.x) > walkThreshold)
         {
             if (!audioSource.isPlaying)
@@ -248,5 +260,6 @@ public class NPCMeleeEnemy : MonoBehaviour
                 audioSource.Stop();
         }
     }
+
 
 }

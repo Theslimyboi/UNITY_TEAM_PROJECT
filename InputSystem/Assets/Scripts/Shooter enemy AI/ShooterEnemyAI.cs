@@ -36,17 +36,29 @@ public class ShooterEnemyAI : MonoBehaviour
         float leftLimit = startPos.x - patrolDistance;
         float rightLimit = startPos.x + patrolDistance;
 
-        // --- WALKING SOUND ---
-        if (audioSource != null && enemyWalkClip != null)
+        // --- WALKING SOUND with distance check ---
+        float dist = Vector2.Distance(transform.position, player.position);
+
+        if (dist < 12f) // girdima tik jei žaidėjas arti
         {
-            if (!audioSource.isPlaying)
+            if (audioSource != null && enemyWalkClip != null)
             {
-                audioSource.clip = enemyWalkClip;
-                audioSource.loop = true;
-                audioSource.Play();
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.clip = enemyWalkClip;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
             }
         }
+        else
+        {
+            // jei žaidėjas toli — nutildom žingsnius
+            if (audioSource != null && audioSource.clip == enemyWalkClip)
+                audioSource.Stop();
+        }
 
+        // --- PATRULIAVIMO LOGIKA ---
         if (movingRight)
         {
             transform.position += Vector3.right * patrolSpeed * Time.deltaTime;
@@ -58,6 +70,7 @@ public class ShooterEnemyAI : MonoBehaviour
             if (transform.position.x <= leftLimit) movingRight = true;
         }
     }
+
 
     void StopWalkingSound()
     {
