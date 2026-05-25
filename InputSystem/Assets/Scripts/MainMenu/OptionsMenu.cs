@@ -11,7 +11,8 @@ public class OptionsMenu : MonoBehaviour
 
     [Header("Resolution options")]
     public TMP_Dropdown resolutionDropdown;
-    Resolution[] resolutions;
+
+    private List<Resolution> filteredResolutions = new List<Resolution>();
 
     [Header("Menu layers")]
     public GameObject mainMenuArea;
@@ -20,30 +21,43 @@ public class OptionsMenu : MonoBehaviour
     void Start()
     {
         float savedVolume = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
-        volumeSlider.value = savedVolume;
+        if (volumeSlider != null) volumeSlider.value = savedVolume;
         AudioListener.volume = savedVolume;
         UpdateVolumeText(savedVolume);
 
-        resolutions = Screen.resolutions;
+        Resolution[] allResolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
+        filteredResolutions.Clear();
+
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
 
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < allResolutions.Length; i++)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
+            string option = allResolutions[i].width + " x " + allResolutions[i].height;
 
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
+            if (!options.Contains(option))
             {
-                currentResolutionIndex = i;
+                options.Add(option);
+                filteredResolutions.Add(allResolutions[i]);
+
+                if (allResolutions[i].width == Screen.currentResolution.width &&
+                    allResolutions[i].height == Screen.currentResolution.height)
+                {
+                    currentResolutionIndex = filteredResolutions.Count - 1;
+                }
             }
         }
 
         resolutionDropdown.AddOptions(options);
 
         int savedRes = PlayerPrefs.GetInt("SelectedRes", currentResolutionIndex);
+
+        if (savedRes >= filteredResolutions.Count)
+        {
+            savedRes = currentResolutionIndex;
+        }
+
         resolutionDropdown.value = savedRes;
         resolutionDropdown.RefreshShownValue();
     }
@@ -63,7 +77,9 @@ public class OptionsMenu : MonoBehaviour
 
     public void SetResolution(int resolutionIndex)
     {
-        Resolution resolution = resolutions[resolutionIndex];
+        if (resolutionIndex < 0 || resolutionIndex >= filteredResolutions.Count) return;
+
+        Resolution resolution = filteredResolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         PlayerPrefs.SetInt("SelectedRes", resolutionIndex);
     }
